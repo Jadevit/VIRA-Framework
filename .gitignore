@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+env/
+
+# Logs
+vira/logs/chat_logs.txt
+
+# Model files
+vira/models/
+
+# VSCode
+.vscode/
+
+# System files
+.DS_Store
