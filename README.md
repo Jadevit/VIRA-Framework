@@ -41,7 +41,7 @@ VIRA-Framework/
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/VIRA-Framework.git
+git clone https://github.com/Jadevit/VIRA-Framework.git
 cd VIRA-Framework
 ```
 2. (Optional) Create a Virtual Environment
@@ -116,7 +116,8 @@ Roadmap
 Author
 
 Jaden Pain
-Self-taught developer, hands-on builder, and a strong believer in doing the work instead of talking about it.
+Self-taught developer.
+
 VIRA was developed in just over a week—what started as a personal challenge became a real, working system.
 
 
