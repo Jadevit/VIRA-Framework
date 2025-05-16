@@ -2,23 +2,29 @@
 
 import os
 
-# Dynamically resolve the path to the GGUF model
+# Path to GGUF model (dynamically resolved)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "VIRA-7b", "vira-q8.gguf")
 
-# Model load-time parameters for llama-cpp
+# llama-cpp init parameters
 INIT_PARAMS = {
-    "n_ctx": 2048,       # Context window size
-    "n_threads": 8,      # CPU threads to use
-    "n_batch": 512,      # Batch size for evaluation
-    "n_gpu_layers": 0,   # GPU acceleration layers (0 = CPU only)
-    "verbose": False     # Set to True for debug output
+    "n_ctx": 2048,
+    "n_threads": 8,
+    "n_batch": 512,
+    "n_gpu_layers": 0,
+    "verbose": False
 }
 
-# Generation parameters used at inference time
+# Text generation parameters
 GENERATION_PARAMS = {
-    "max_tokens": 512,       # Maximum tokens to generate
-    "temperature": 0.8,      # Sampling temperature
-    "top_p": 0.9,            # Nucleus sampling
-    "stop": ["</s>"]         # Token(s) to end generation
+    "max_tokens": 512,
+    "temperature": 0.8,
+    "top_p": 0.9,
+    "stop": ["</s>"]
 }
+
+# System prompt for VIRA's persona (placeholder version)
+SYSTEM_PROMPT = (
+    "[SYSTEM_PROMPT_PLACEHOLDER] "
+    "Replace this with your custom identity prompt."
+)

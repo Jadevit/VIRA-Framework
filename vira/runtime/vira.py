@@ -1,12 +1,14 @@
+# vira/runtime/vira.py
+
 from llama_cpp import Llama
-from vira.core.config import MODEL_PATH, INIT_PARAMS, GENERATION_PARAMS
+from vira.core.config import MODEL_PATH, INIT_PARAMS, GENERATION_PARAMS, SYSTEM_PROMPT
 from vira.core.prompting import build_prompt
-from vira.core.memory import save_conversation
+from vira.core.memory import conversation_history, save_conversation, trim_history
+from vira.audio.tts_engine import speak  # VIRA speaks via TTS
 
 def stream_response(llm, prompt):
     """
-    Streams the model's response token-by-token to simulate real-time chat.
-    Returns the full output as a string.
+    Streams response tokens from the LLM and prints them in real-time.
     """
     print("VIRA: ", end='', flush=True)
     full_output = ""
@@ -14,13 +16,13 @@ def stream_response(llm, prompt):
         text = chunk['choices'][0]['text']
         print(text, end='', flush=True)
         full_output += text
-    print()  # newline after stream ends
+    print()
     return full_output.strip()
 
 def start_chat():
     """
-    Launches VIRA's CLI interface using llama.cpp.
-    Manages input loop, streaming output, session memory, and error handling.
+    Main chat loop. Accepts user input, builds prompt, streams LLM response,
+    speaks it aloud, and logs conversation history.
     """
     print("[+] Booting VIRA...")
 
@@ -32,8 +34,6 @@ def start_chat():
 
     print("[✓] VIRA is online. Type 'exit' to shut her down.")
 
-    conversation_history = []
-
     while True:
         try:
             user_input = input("You: ").strip()
@@ -41,26 +41,22 @@ def start_chat():
                 print("[-] Shutting down VIRA.")
                 break
 
-            # Build prompt from recent context
-            prompt_parts = conversation_history[-4:]  # max last 4 turns
-            prompt_text = ""
-            for pair in prompt_parts:
+            # Build prompt from past 4 interactions
+            prompt_text = SYSTEM_PROMPT + "\n\n"
+            for pair in conversation_history[-4:]:
                 prompt_text += build_prompt(pair["user"]) + pair["vira"] + "\n"
-
-            # Add current message
             prompt_text += build_prompt(user_input)
 
-            # Generate and stream output
+            # Generate output
             model_output = stream_response(llm, prompt_text)
 
-            # Log to file
-            save_conversation(user_input, model_output)
+            # TTS output
+            speak(model_output)
 
-            # Update in-memory history
-            conversation_history.append({
-                "user": user_input,
-                "vira": model_output
-            })
+            # Save and update memory
+            save_conversation(user_input, model_output)
+            conversation_history.append({"user": user_input, "vira": model_output})
+            conversation_history[:] = trim_history(conversation_history)
 
         except KeyboardInterrupt:
             print("\n[-] Session interrupted.")

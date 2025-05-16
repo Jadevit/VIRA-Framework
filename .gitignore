@@ -8,8 +8,11 @@ __pycache__/
 venv/
 env/
 
+# TTS output
+vira/audio/output/*.wav
+
 # Logs
-vira/logs/chat_logs.txt
+vira/logs/chat_log.txt
 
 # Model files
 vira/models/
