@@ -67,7 +67,7 @@ VIRA-Framework/
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/VIRA-Framework.git
+git clone https://github.com/Jadevit/VIRA-Framework.git
 cd VIRA-Framework
 ```
 
